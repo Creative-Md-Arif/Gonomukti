@@ -104,7 +104,7 @@ export default function AdminLayout({
   const location = useLocation();
   const siteData = useSiteData();
 
-  // Sidebar ডার্ক ব্যাকগ্রাউন্ড — তাই logoDark আগে, না থাকলে logoLight
+
   const logoUrl = siteData.logoDark || siteData.logoLight;
 
   return (
