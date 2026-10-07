@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X, Save, Loader2, Pencil, Plus } from "lucide-react";
 import ImageUploader from "./ImageUploader";
+import MultiImageUploader from "./MultiImageUploader";
 import type { CollectionConfig } from "./adminConfig";
 
 interface RecordItem {
@@ -30,6 +31,10 @@ export default function EditForm({
         initial[field.name] = Array.isArray(item?.[field.name])
           ? (item![field.name] as string[]).join("\n")
           : "";
+      } else if (field.type === "imageList") {
+        initial[field.name] = Array.isArray(item?.[field.name])
+          ? (item![field.name] as string[])
+          : [];
       } else if (field.type === "boolean") {
         initial[field.name] = item?.[field.name] ?? false;
       } else if (field.type === "number") {
@@ -50,6 +55,10 @@ export default function EditForm({
           .split("\n")
           .map((s) => s.trim())
           .filter(Boolean);
+      } else if (field.type === "imageList") {
+        processed[field.name] = Array.isArray(form[field.name])
+          ? (form[field.name] as string[]).filter(Boolean)
+          : [];
       } else if (field.type === "number") {
         processed[field.name] = Number(form[field.name]);
       } else if (field.type === "boolean") {
@@ -67,7 +76,10 @@ export default function EditForm({
   const fullSpan = "sm:col-span-2";
 
   const isWide = (type: string) =>
-    type === "textarea" || type === "list" || type === "image";
+    type === "textarea" ||
+    type === "list" ||
+    type === "image" ||
+    type === "imageList";
 
   return (
     <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-ocean-950/60 backdrop-blur-sm animate-fade-in p-0 sm:p-4">
@@ -123,6 +135,17 @@ export default function EditForm({
                         value={(form[field.name] as string) || ""}
                         onChange={(url) =>
                           setForm({ ...form, [field.name]: url })
+                        }
+                        folder={`gonomukti/${field.name}`}
+                      />
+                    </div>
+                  ) : field.type === "imageList" ? (
+                    <div className="rounded-2xl border border-sand-200 bg-white p-3 sm:p-4 shadow-sm">
+                      <MultiImageUploader
+                        label={field.label}
+                        value={(form[field.name] as string[]) || []}
+                        onChange={(urls) =>
+                          setForm({ ...form, [field.name]: urls })
                         }
                         folder={`gonomukti/${field.name}`}
                       />

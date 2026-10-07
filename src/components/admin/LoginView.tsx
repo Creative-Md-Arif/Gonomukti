@@ -16,7 +16,6 @@ export default function LoginView() {
   const { login } = useAuth();
   const siteData = useSiteData();
 
-  // ডার্ক ব্যাকগ্রাউন্ড — তাই logoDark আগে, না থাকলে logoLight
   const logoUrl = siteData.logoDark || siteData.logoLight;
 
   const [email, setEmail] = useState("admin@gonomukti-bd.org");
